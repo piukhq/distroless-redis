@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: default
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: app
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/binkhq/distroless-redis:latest
+          ports:
+            - containerPort: 6379
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 1000m
+            requests:
+              memory: 256Mi
+              cpu: 100m
+      serviceAccountName: redis
